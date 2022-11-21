@@ -1,43 +1,86 @@
 #include <stdio.h>
 
-typedef struct 
+typedef struct
 {
-    int A[5];
+    int A[101];
     int n;
     int tamanhoDoHeap;
-}HEAP;
+} HEAP;
 
-int pai(int i){
-    return i/2;
+int pai(int i)
+{
+    return i / 2;
 }
-int filho_Left(int i){
-    return 2*i;
+int filho_Left(int i)
+{
+    return 2 * i;
 }
-int filho_Right(int i){
-    return 2*i+1;
+int filho_Right(int i)
+{
+    return 2 * i + 1;
 }
 
-void refazHeapMaximo(int A[],int i){
-    int L =filho_Left(i);
+void refazHeapMaximo(HEAP *h, int i)
+{
+
+    int L = filho_Left(i);
     int R = filho_Right(i);
-    int maior=0;
-    if(L<=tamanhoDoHeap[A] && A[R]>A[i]) maior=L;
-    else maior=i;
+    int maior = 0;
+    if (L <= h->n && h->A[R] > h->A[i])
+        maior = L;
+    else
+        maior = i;
 
-    if(R<=tamanhoDoHeap[A] && A[R]>A[maior]) maior=R;
-    if(maior != i){
-        int aux=A[i];
-        A[i]= A[maior];
-        A[maior]=aux;
-        refazHeapMaximo(A, maior);
+    if (R <= h->tamanhoDoHeap && h->A[R] > h->A[maior])
+        maior = R;
+    if (maior != i)
+    {
+        int aux = h->A[i];
+        h->A[i] = h->A[maior];
+        h->A[maior] = aux;
+        refazHeapMaximo(&h, maior);
     }
 }
-void HeapSort(HEAP* h)
+void constroiHeapMaximo(HEAP *h)
 {
-    constroiHeapMaximo(h);
-    for(int i)
-}
-int main(){
-    int vetor[5] = {5, 2, 3, 1, 4};
 
+    h->tamanhoDoHeap = h->n;
+    for (int i = h->n / 2; i >= 1; i--)
+    {
+
+        refazHeapMaximo(&h, i);
+    }
+}
+void HeapSort(HEAP *h)
+{
+
+    constroiHeapMaximo(&h);
+    for (int i = (h->n); i >= 2; i--)
+    {
+
+        int aux = h->A[1];
+        h->A[1] = h->A[i];
+        h->A[i] = aux;
+        h->tamanhoDoHeap = (h->tamanhoDoHeap) - 1;
+
+        refazHeapMaximo(&h, 1);
+    }
+}
+int main()
+{
+    int vetor[5] = {5, 2, 3, 1, 4};
+    HEAP h;
+    h.n = 5;
+    h.tamanhoDoHeap = (h.n) / 2;
+    for (int i = 1; i <= h.n; i++)
+    {
+        h.A[i] = vetor[i - 1];
+        printf("%d ", h.A[i]);
+    }
+    HeapSort(&h);
+    printf("\n");
+    for (int i = 1; i <= h.n; i++)
+    {
+        printf("%d ", h.A[i]);
+    }
 }
